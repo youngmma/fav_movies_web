@@ -1,3 +1,7 @@
+# Detailed documentation of this project
+Visit: http://bit.ly/1qB5SNA
+
+
 # How To Get Started
 
 1. Clone this repository to your laptop.
