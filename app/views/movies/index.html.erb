@@ -1,0 +1,85 @@
+<!-- This is the main page that displays either all movies or movies under user selected genre -->
+
+<div class="page-header">
+  <!-- Only admin user can add new movie or genre -->
+  <% if session[:admin_user].present? %>
+    <div>
+      <%= link_to "Add a New Movie", new_movie_url, :class => "pull-right btn btn-success btn-large" %>
+    </div>
+
+    <div>
+    <%= link_to "Add Genre", new_genre_url, :class => "pull-right btn btn-success btn-large" %>
+    </div>
+  <% end %>
+  
+  <!-- if a specific movie genre is selected, then print the selected genre name as title -->
+  <% if @genre.present? %>
+    <h1><%= @genre %> Movie List</h1>
+  <% else %>
+    <h1>All Movies</h1>
+  <% end %> 
+</div>
+
+<!-- print list of movies (all or under a specific genre selected by the user) -->
+<% if @movies.present? %>
+  <% @movies.each do |movie| %>
+    <div class="row">
+      <div class="col-md-3">
+        <%= image_tag movie.image_url, :class => "col-md-10" %>
+      </div>
+      <div class="col-md-9">
+        <h2>
+          <%= link_to movie.title, movie_path(movie.id) %>
+          (<%= movie.year %>)
+        </h2>
+
+          <!-- Uner the movie title, affilated genre is printed (if not found print "Genre not found"-->
+          <% if movie.genre.nil? %>
+            <p class="lead">
+            <span class="label label-success">Genre: not found</span>
+            </p>
+          <% else %>
+            <p class="lead">
+            <span class="label label-success">Genre: <%= movie.genre.name %></span>
+            </p>
+          <% end %>
+
+        <p class="lead"><%= movie.plot %></p>
+        <!-- Extract Directed by info -->
+        <p>Directed by <%= movie.director.name %></p>
+        <!-- Extract starred actor info (if found)-->
+        <% if (Role.find_by movie_id: movie.id).blank? %>
+          <p></p>
+        <% else %>
+          <p>Starring <%=  (Actor.find_by id: ((Role.find_by movie_id: movie.id).actor_id)).name %></p>
+        <% end %>
+        <% if session[:admin_user].present? %>
+          <!-- only admin user can edit or delete the movie -->
+          <p>
+            <%= link_to "Edit This Movie", edit_movie_path(movie.id) %> |
+            <%= link_to "Delete This Movie", movie_path(movie.id), :method => 'delete' %>
+          </p>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+    <!-- if no movie is found, nofity user as such -->
+    <strong>No Movies on the list</strong>
+<% end %> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

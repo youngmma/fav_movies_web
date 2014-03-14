@@ -1,0 +1,29 @@
+<!-- Displays list of actor including his/her casted movies found in DB -->
+
+<div class="page-header">
+
+  <%= link_to "Add a New Actor", new_actor_path, :class => "pull-right btn btn-success btn-large" %>
+
+  <h1>List of Actors</h1>
+</div>
+
+
+<% @actors.each do |actor| %>
+  <div class="row">
+    <div class="col-md-3">
+      <%= image_tag actor.photo_url, :class => "col-md-10" %>
+    </div>
+    <div class="col-md-9">
+      <h2>
+        <%= actor.name %>
+      </h2>
+
+      <strong>List of Casted Movies:</strong><br>
+      <h4>
+      <% actor.movies.each do |movie| %>
+        <p><%= movie.title %></p>
+      <% end %>
+      </h4>
+    </div>
+  </div>
+<% end %>

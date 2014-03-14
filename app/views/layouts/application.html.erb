@@ -1,0 +1,102 @@
+<!-- Displays top and bottom navigation bars -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>MoviesApp</title>
+
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/3.0.3/cerulean/bootstrap.min.css">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+
+
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <%= link_to "Young's Rotten Tomatoes", "/", :class => "navbar-brand" %>
+    </div>
+
+    <!-- Top navigation bar showing option to view all movies or movies by genre -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="#">|</a></li>
+        <li><%= link_to "All Movies", movies_path %></li>
+        <li><a href="#">|</a></li>
+        <!-- Display all avail genres in top nagivation bar -->
+        <% Genre.all.order("name").each do |genre| %>
+            <!-- http://guides.rubyonrails.org/action_controller_overview.html (parameter section)-->
+            <li><a href="/movies?genre=<%= genre.name %>"><%= genre.name %></a></li>
+        <% end %>
+        <li><a href="#">|</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <!-- Display user's name once user logs in. Otherwise just say "Welcome"-->
+      <% if session[:user_id].present? %>
+        <%= link_to "Welcome "+ User.find_by(:id => session[:user_id]).name + "!", "/", :class => "navbar-brand" %>
+      <% else %>
+        <%= link_to "Welcome!", "/", :class => "navbar-brand" %>
+      <% end %>
+    </div>
+
+    <!-- Unless user logs in, bottom navigation will display "sign up" and "sign in"  -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <% if session[:user_id].blank? %>
+          <li><%= link_to "Sign Up", new_user_url %></li>
+          <li><%= link_to "Sign In", new_session_url %></li>
+        <% else %>
+          <li><%= link_to "My Profile", user_url(session[:user_id]) %></li>
+          <li><%= link_to "Sign Out", logout_url %></li>
+        <% end %>
+        <li><a href="#">|</a></li>
+        <li><%= link_to "Directors", directors_url %></li>
+        <li><%= link_to "Actors", actors_url %></li>
+        <li><a href="#">|</a></li>
+
+      </ul>
+    </div>
+  </nav>
+    
+  <!-- Show notices that alerts user what has to be done or what has been done by their action -->
+  <div class="container">
+    <% if notice.present? %>
+      <div class="alert alert-dismissable alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <%= notice %>
+      </div>
+    <% end %>
+
+    <%= yield %>
+  </div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!-- 
+  This form is creates movie sign up page.
+  Through movie ActiveRecord, it validates the format of email address, 
+  presence of name and confirms that movie typed in matching (secure) passwords.
+  Error msg is printed out through first if statement
+ -->
+
+<div class="page-header">
+<h1>Add new Movie!</h1>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+
+    <%= form_tag movies_url do %>
+      <% if @movie.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@movie.errors.count, "error") %> prohibited this movie from being saved:</h2>
+          <ul>
+          <% @movie.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= label_tag :title %>
+        <%= text_field_tag :title, "", class: 'form-control', placeholder: 'Enter movie title here' %>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :director_id, "Director:" %>
+        <%= select_tag :director_id, options_from_collection_for_select(Director.all.order('name asc'), :id, :name), class: 'form-control' %>
+        <!-- passes the param value to new director page in order to allow use to come back to add new movie page -->
+        <%= link_to "Add New Director", "/directors/new?from=new_movie" %> 
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :genre_id, "Genre:" %>
+        <%= select_tag :genre_id, options_from_collection_for_select(Genre.all.order('name asc'), :id, :name), class: 'form-control' %>
+        <!-- passes the param value to new genre page in order to allow use to come back to add new movie page -->
+        <%= link_to "Add New Genre", "/genres/new?from=new_movie" %> 
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :poster_url, "Poster (image) URL:" %>
+        <%= url_field_tag :poster_url, "", class: 'form-control', placeholder: 'Enter URL to a movie poster image' %>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :trailer_url, "Trailer (YouTube embed) URL:" %>
+        <%= url_field_tag :trailer_url, "", class: 'form-control', placeholder: 'Example: http://www.youtube.com/embed/videoID (must contain word embed)' %>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :year, "Year: "%>
+        <%= text_field_tag :year, "", class: 'form-control', placeholder: "Enter year here" %>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :plot, "Plot Summary: "%>
+        <%= text_field_tag :plot, "", class: 'form-control', placeholder: "Enter plot here" %>
+      </div>
+
+          <%= submit_tag 'Add Movie', class: 'btn btn-default' %>
+    <% end %>
+  </div>
+</div>

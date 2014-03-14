@@ -1,0 +1,46 @@
+<!-- Displays list of director including his/her directed movies found in DB -->
+
+<div class="page-header">
+
+  <%= link_to "Add a New Director", new_director_path, :class => "pull-right btn btn-success btn-large" %>
+
+  <h1>List of Directors</h1>
+</div>
+
+
+<% @directors.each do |director| %>
+  <div class="row">
+    <div class="col-md-3">
+      <%= image_tag director.photo_url, :class => "col-md-10" %>
+    </div>
+    <div class="col-md-9">
+      <h2>
+        <%= director.name %>
+      </h2>
+      
+      <strong>List of Directed Movies:</strong><br>
+      <h4>
+      <% director.movies.each do |movie| %>
+        <p><%= movie.title %></p>
+      <% end %>
+      </h4>
+    </div>
+  </div>
+<% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,19 @@
+<!-- adds genre entered by the user -->
+
+<div class="page-header">
+  <h1>Add Genres</h1>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <%= form_tag genres_url, :method => 'post' do %>
+      <div class="form-group">
+        <%= label_tag :name, "Add New Genre" %>
+        <%= text_field_tag :name, "", class: 'form-control', placeholder: 'Enter new genre here' %>
+      </div>
+      <%= submit_tag 'Add Genre', class: 'btn btn-default' %>
+      <%= link_to 'Back', movies_url, class: 'btn btn-default' %>
+    <% end %>
+  </div>
+</div>
+

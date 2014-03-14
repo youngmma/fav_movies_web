@@ -1,0 +1,28 @@
+<!-- Get user input to add a new director -->
+
+<div class="page-header">
+  <h1>Add a New Director</h1>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+
+    <%= form_tag directors_url, :method => 'post' do %>
+
+      <div class="form-group">
+        <%= label_tag :name %>
+        <%= text_field_tag :name, "", class: 'form-control', placeholder: 'Enter the name of director here' %>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :photo_url %>
+        <%= url_field_tag :photo_url, "", class: 'form-control', placeholder: 'Enter URL to image of director image' %>
+      </div>
+
+      <%= submit_tag 'Add Director', class: 'btn btn-default' %>
+      <%= link_to 'Back', movies_url, class: 'btn btn-default' %>
+    <% end %>
+
+  </div>
+</div>
+

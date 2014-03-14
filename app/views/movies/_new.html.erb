@@ -1,0 +1,59 @@
+<!-- Allows user to add new movie user will need the following info of the movie: -->
+<!-- title, director genre, poster url, trailer url, year, plot -->
+
+<!-- TO DO: Find a way to add cast to the movie when adding new movie -->
+
+
+<div class="page-header">
+  <h1>Add a New Movie</h1>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+
+    <%= form_tag movies_url, :method => 'post' do %>
+
+      <div class="form-group">
+        <%= label_tag :title %>
+        <%= text_field_tag :title, "", class: 'form-control', placeholder: 'Enter movie title here' %>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :director_id, "Director" %>
+        <%= select_tag :director_id, options_from_collection_for_select(Director.all.order('name asc'), :id, :name), class: 'form-control' %>
+        <!-- passes the param value to new director page in order to allow use to come back to add new movie page -->
+        <%= link_to "Add New Director", "/directors/new?from=new_movie" %> 
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :genre_id, "Genre" %>
+        <%= select_tag :genre_id, options_from_collection_for_select(Genre.all.order('name asc'), :id, :name), class: 'form-control' %>
+        <!-- passes the param value to new genre page in order to allow use to come back to add new movie page -->
+        <%= link_to "Add New Genre", "/genres/new?from=new_movie" %> 
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :poster_url %>
+        <%= url_field_tag :poster_url, "", class: 'form-control', placeholder: 'Enter URL to a movie poster image' %>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :trailer_url %>
+        <%= url_field_tag :trailer_url, "", class: 'form-control', placeholder: 'Example: http://www.youtube.com/embed/videoID (must contain word embed)' %>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :year %>
+        <%= text_field_tag :year, "", class: 'form-control', placeholder: "Enter year here" %>
+      </div>
+
+      <div class="form-group">
+        <label for="year">Plot Summary:</label>
+        <input type="text" name="plot" class="form-control" id="year" placeholder="Enter plot here" %>
+      </div>
+
+      <%= submit_tag 'Add Movie', class: 'btn btn-default' %>
+    <% end %>
+
+  </div>
+</div>

@@ -1,0 +1,85 @@
+<!-- Displays the details of the selcted movie -->
+<!-- On top of original details (title, year and plot), I added trailer player (with auto-play) and comment section -->
+<!-- User must be logged on to leave a comment -->
+
+
+<div class="page-header">
+  <!-- Only admin user can edit or delete the movie  -->
+  <% if session[:admin_user].present? %>
+    <%= link_to "Edit This Movie", edit_movie_path(@movie.id), class: 'pull-right btn btn-large btn-info' %>
+    <%= link_to "Delete This Movie", movie_path(@movie.id), method: 'delete', class: 'pull-right btn btn-large btn-danger' %>
+  <% end %>
+  <h1><%= @movie.title %></h1>
+</div>
+
+<div class="row">
+  <div class="col-md-3">
+    <%= image_tag @movie.image_url, width: 250 %>
+
+  </div>
+  <div class="col-md-9">
+    <p class="lead">
+      <strong>Title:</strong>
+      <%= @movie.title %>
+    </p>
+    <p class="lead"><strong>Year: </strong><%= @movie.year %></p>
+    <p class="lead"><strong>Plot: </strong><%= @movie.plot %></p>
+    <p class="lead">
+
+    <!-- If trailer USL is found, enable iframe to play the trailer with auto play on -->
+    <strong>Trailer:</strong><br>
+    <% if @movie.trailer_url.nil? %>
+      No Trailer Found.
+    <% else %>
+      <iframe width="560" height="315" src="<%= @movie.trailer_url %>?autoplay=1"></iframe>
+    <% end %>
+    </p>
+  
+    <!-- User can rate the movie and leave a review comment after login in. -->
+    <p><hr></p> 
+    <div>     
+      <p class="lead"><strong><h4>Review this movie:</h4></strong></p>
+      <p>
+        <% if session[:user_id].present? %>
+          <%= form_tag reviews_url, :method => 'post' do %>
+
+            <input name="movie_id" value=<%= @movie.id %> type="hidden">
+            <input name="user_id" value=<%= session[:user_id] %> type="hidden">
+
+            <!-- movie rating options by tomatos -->
+            <div class="form-group">
+              Rating: <%= select_tag "rating", "<option>1 Tomato</option><option>2 Tomatos</option><option>3 Tomatos</option><option>4 Tomatos</option><option>5 Tomatos</option>".html_safe %>
+            </div>
+            <!-- text area for comments -->
+            <div class="form-group">
+              <%= text_area_tag :line_summary, "", class: 'form-control', rows: 2, placeholder: 'Enter a line review' %>
+            </div>
+            
+            <%= submit_tag 'Submit Review', class: 'btn' %><br>
+          <% end %>
+        <% else %>
+          <!-- if user is not logged in, page prompt user to sign in order to leave a comment -->
+          <%= link_to 'Login To Post a Review', '/login', class: 'btn btn-default' %>       
+        <% end %>
+      </p>
+      <p><hr></p>  
+      <!-- Display reviews by other users (if any exists in DB) -->
+      <p><h4>Other Reviews:</h4>
+        <% if @reviews.any? %>
+          <% @reviews.each do |review| %>
+            <div>
+                Name: <%= User.find_by(:id => review.user_id).name %><br>
+                <!-- display rating by number of tomatos (image source: rotten tomato website) -->
+                Rating: <% review.rating.times do %><%= image_tag("tomato.png", size: "20") + "&nbsp;".html_safe %><% end %><br>
+                Comments: <%= review.line_summary %>
+            </div>
+            <p><hr></p> 
+          <% end %>
+        <% else %>
+          <!-- if no review exists tell user as such -->
+          No Reviews Yet!
+        <% end %>
+      </p>
+    </div>
+  </div>
+</div>
